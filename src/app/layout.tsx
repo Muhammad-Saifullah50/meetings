@@ -27,12 +27,8 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className="flex ">
-          <Sidebar />
-          <section className="w-full h-screen overflow-hidden">
-            <Navbar />
-            {children}
-          </section>
+        <body>
+          {children}
         </body>
       </html>
     </ClerkProvider>

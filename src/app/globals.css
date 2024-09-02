@@ -18,12 +18,9 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
@@ -44,12 +41,16 @@ body {
   @apply bg-dark-tertiary
 }
 
+.cl-formFieldInput {
+  color: white;
+}
+
 .cl-formButtonPrimary {
-background-color: #0E78F9 !important;
+  background-color: #0E78F9 !important;
 }
 
 .cl-socialButtonsBlockButton {
-@apply !border-2 !border-dark-tertiary w-fit p-4
+  @apply !border-2 !border-dark-tertiary w-fit p-4
 }
 
 .cl-socialButtonsProviderIcon__github {
@@ -60,6 +61,57 @@ background-color: #0E78F9 !important;
   @apply max-md:hidden
 }
 
-.cl-socialButtons{
+.cl-socialButtons {
   @apply flex gap-3 justify-start
+}
+
+
+.cl-socialButtonsBlockButtonText {
+  color: rgb(116, 118, 134);
+}
+
+.cl-headerTitle {
+  color: white;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cl-headerSubtitle {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cl-formFieldLabel {
+  color: white;
+}
+
+.cl-footerActionLink {
+  @apply text-blue hover:text-blue
+}
+
+.cl-formFieldInputShowPasswordButton {
+  @apply invert
+}
+
+@layer base {
+  /* Remove scrollbar */
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    border-radius: 0px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 0px;
+  }
+
+  ::webkit-scrollbar-thumb:hover {
+    /* background: #1e2238; */
+    background: transparent;
+  }
 }
