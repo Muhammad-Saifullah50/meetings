@@ -31,3 +31,35 @@ body {
     text-wrap: balance;
   }
 }
+
+.cl-card {
+  @apply bg-dark-secondary
+}
+
+.cl-footer {
+  background: linear-gradient(to bottom, #1C1F2E, #1C1F2E) !important;
+}
+
+.cl-formFieldInput {
+  @apply bg-dark-tertiary
+}
+
+.cl-formButtonPrimary {
+background-color: #0E78F9 !important;
+}
+
+.cl-socialButtonsBlockButton {
+@apply !border-2 !border-dark-tertiary w-fit p-4
+}
+
+.cl-socialButtonsProviderIcon__github {
+  @apply invert
+}
+
+.cl-socialButtonsBlockButtonText {
+  @apply max-md:hidden
+}
+
+.cl-socialButtons{
+  @apply flex gap-3 justify-start
+}

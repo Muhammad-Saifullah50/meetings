@@ -29,7 +29,7 @@ export default function RootLayout({
       <html lang="en">
         <body className="flex ">
           <Sidebar />
-          <section className="w-full">
+          <section className="w-full h-screen overflow-hidden">
             <Navbar />
             {children}
           </section>
