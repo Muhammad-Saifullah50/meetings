@@ -8,8 +8,8 @@ export default function RootLayout({
 }) {
   return (
     <body className="flex flex-col">
-      <div>
-      <Navbar />
+      <div className="sticky top-0">
+        <Navbar />
       </div>
       <section className="w-full flex h-screen overflow-hidden">
         <Sidebar />

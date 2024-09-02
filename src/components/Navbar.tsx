@@ -4,7 +4,7 @@ import React from 'react'
 
 const Navbar = () => {
   return (
-    <nav className='bg-dark-secondary flex justify-between items-center p-3 top-0 left-0 sticky w-full'>
+    <nav className='bg-dark-secondary flex justify-between items-center p-3'>
       <div className='flex gap-2 items-center justify-start'>
         <Image
           src={'/logo.svg'}

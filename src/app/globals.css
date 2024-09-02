@@ -115,3 +115,7 @@ body {
     background: transparent;
   }
 }
+
+.cl-userButtonPopoverActionButton, .cl-userPreview {
+  @apply bg-dark-secondary
+}
