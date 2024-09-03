@@ -7,13 +7,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <body className="flex flex-col">
+    <body className="flex flex-col text-light">
       <div className="sticky top-0">
         <Navbar />
       </div>
       <section className="w-full flex h-screen overflow-hidden">
         <Sidebar />
-        {children}
+        <main className="w-full"> 
+          {children}
+        </main>
       </section>
     </body>
   )

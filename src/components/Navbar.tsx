@@ -12,7 +12,7 @@ const Navbar = () => {
           height={40}
           alt='Meetings logo'
         />
-        <h1 className='font-bold text-2xl'>MEETINGS</h1>
+        <h1 className='font-bold text-2xl text-[#ffffff]'>MEETINGS</h1>
       </div>
 
       <div>
