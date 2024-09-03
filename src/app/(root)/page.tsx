@@ -1,10 +1,44 @@
+import ActionCard from "@/components/ActionCard";
 import Hero from "@/components/Hero";
 import { SignOutButton } from "@clerk/nextjs";
 
 export default function Home() {
   return (
-    <main className="flex h-full bg-dark-primary w-full overflow-y-scroll p-8 ">
-      <Hero/>
+    <main className="flex flex-col gap-8 h-full bg-dark-primary w-full overflow-y-scroll p-8 ">
+      <Hero />
+
+      <section className="flex w-full gap-4 mt-[200px] justify-between">
+        <ActionCard
+          title='New Meeting'
+          subTitle='Setup a new recording'
+          iconPath='/plus-white.svg'
+          color='orange'
+        />
+        <ActionCard
+          title='Join Meeting'
+          subTitle='via invitation link'
+          iconPath='/user.svg'
+          color='blue'
+        />
+        <ActionCard
+          title='Schedule Meeting'
+          subTitle='Plan your meeting'
+          iconPath='/calendar.svg'
+          color='purple'
+        />
+        <ActionCard
+          title='View Recordings'
+          subTitle='Meeting recordings'
+          iconPath='/video.svg'
+          color='yellow'
+        />
+      </section>
+
+      <section>
+        <h2 className="text-3xl font-bold text-white">Today&apos;s Upcoming Meetings</h2>
+        {/* Upcoming Meetings */}
+      </section>
+
     </main>
   );
 }

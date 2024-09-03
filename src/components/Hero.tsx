@@ -1,15 +1,29 @@
+'use client'
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import date from 'date-and-time';
 
 const Hero = () => {
     const now = new Date();
 
-    const hrAndMin = date.format(now, 'hh:mm A').slice(0, 5);
-    const amPm = date.format(now, 'hh:mm A').slice(5);
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
+
+    const hrAndMin = date.format(currentTime, 'hh:mm A').slice(0, 5);
+    const amPm = date.format(currentTime, 'hh:mm A').slice(5);
+
 
     const pattern = date.compile('dddd, DD MMMM YYYY');
-    const finalDate = date.format(now, pattern);
+    const finalDate = date.format(currentTime, pattern);
 
     return (
         <section className='flex'>
