@@ -7,25 +7,32 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Button } from "./ui/button"
 import { meetingFormSchema } from "@/validations"
 import { Input } from "./ui/input"
+import { createNewMeeting } from "@/actions/meeting.actions"
+import { useRouter } from "next/navigation"
 
-const MeetingForm = ({ type }: { type: 'new' | 'join' | 'schedule' | 'recordings' }) => {
+interface MeetingFormProps {
+    title: string
+    type: 'new' | 'join' | 'schedule' | 'recordings'
+    userId?: string
+    email?: string
+}
 
-    const form = useForm<z.infer<typeof meetingFormSchema>>({
-        resolver: zodResolver(meetingFormSchema),
-        defaultValues: {
-            username: "",
-        },
-    })
+const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
+    const router = useRouter();
+    const form = useForm();
 
-    function onSubmit(values: z.infer<typeof meetingFormSchema>) {
-
-        console.log(values)
+    // todo: have to correct the types
+    async function onSubmit(values: any) {
+        if (type === 'new') {
+            const meeting = await createNewMeeting(email!, userId!, title);
+            if (meeting) router.push(`/meeting/${meeting.id}`);
+        }
     };
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
+                {/* <FormField
                     control={form.control}
                     name="username"
                     render={({ field }) => (
@@ -40,8 +47,14 @@ const MeetingForm = ({ type }: { type: 'new' | 'join' | 'schedule' | 'recordings
                             <FormMessage />
                         </FormItem>
                     )}
-                />
-                <Button type="submit">Submit</Button>
+                /> */}
+                <Button
+                    type="submit"
+                    className="bg-blue w-full hover:bg-blue/90 text-base font-semibold" >
+                    {type === 'new' ? 'Start an instant meeting' :
+                        type === 'join' ? 'Join a meeting' :
+                            type === 'schedule' ? 'Schedule a meeting' : 'View recordings'}
+                </Button>
             </form>
         </Form>
     )

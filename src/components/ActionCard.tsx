@@ -10,8 +10,10 @@ interface ActionCardProps {
     iconPath: string
     color: string
     type: 'new' | 'join' | 'schedule' | 'recordings'
+    userId?: string
+    email?: string
 }
-const ActionCard = ({ title, subTitle, iconPath, color, type }: ActionCardProps) => {
+const ActionCard = ({ title, subTitle, iconPath, color, type, userId, email }: ActionCardProps) => {
 
     const router = useRouter();
     const [modalOpen, setModalOpen] = useState(false)
@@ -22,6 +24,8 @@ const ActionCard = ({ title, subTitle, iconPath, color, type }: ActionCardProps)
             setOpen={setModalOpen}
             title={title}
             type={type}
+            userId={userId}
+            email={email}
         />
         <div
             onClick={() => {

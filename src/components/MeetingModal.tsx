@@ -11,17 +11,22 @@ interface MeetingModalProps {
     setOpen: (open: boolean) => void
     title: string
     type: 'new' | 'join' | 'schedule' | 'recordings'
+    userId?: string
+    email?: string
 }
 
-const MeetingModal = ({ title, open, setOpen, type }: MeetingModalProps) => {
+const MeetingModal = ({ title, open, setOpen, type,userId,email }: MeetingModalProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent>
+            <DialogContent className="bg-dark-secondary border-dark-secondary">
                 <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
+                    <DialogTitle className="text-white font-bold text-3xl">{title}</DialogTitle>
                 </DialogHeader>
                 <MeetingForm
                     type={type}
+                    userId={userId}
+                    title={title}
+                    email={email}
                 />
             </DialogContent>
         </Dialog>

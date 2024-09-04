@@ -1,8 +1,10 @@
 import ActionCard from "@/components/ActionCard";
 import Hero from "@/components/Hero";
-import { SignOutButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 
-export default function Home() {
+export default async function Home() {
+
+  const user = await currentUser();
   return (
     <main className="flex flex-col gap-8 h-full bg-dark-primary w-full overflow-y-scroll p-8 ">
       <Hero />
@@ -14,6 +16,8 @@ export default function Home() {
           iconPath='/plus-white.svg'
           color='bg-orange'
           type='new'
+          userId={user?.id}
+          email={user?.emailAddresses[0].emailAddress}
         />
         <ActionCard
           title='Join Meeting'
