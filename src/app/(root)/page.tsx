@@ -12,25 +12,29 @@ export default function Home() {
           title='New Meeting'
           subTitle='Setup a new recording'
           iconPath='/plus-white.svg'
-          color='orange'
+          color='bg-orange'
+          type='new'
         />
         <ActionCard
           title='Join Meeting'
           subTitle='via invitation link'
           iconPath='/user.svg'
-          color='blue'
+          color='bg-blue'
+          type='join'
         />
         <ActionCard
           title='Schedule Meeting'
           subTitle='Plan your meeting'
           iconPath='/calendar.svg'
-          color='purple'
+          color='bg-purple'
+          type='schedule'
         />
         <ActionCard
           title='View Recordings'
           subTitle='Meeting recordings'
           iconPath='/video.svg'
-          color='yellow'
+          color='bg-yellow'
+          type='recordings'
         />
       </section>
 
