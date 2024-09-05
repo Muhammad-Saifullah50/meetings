@@ -23,7 +23,7 @@ export default function RootLayout({
       baseTheme: dark,
     }}>
       <html lang="en">
-        <body>
+        <body className="bg-dark-primary">
           {children}
         </body>
       </html>

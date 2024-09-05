@@ -25,7 +25,7 @@ const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
     async function onSubmit(values: any) {
         if (type === 'new') {
             const meeting = await createNewMeeting(email!, userId!, title);
-            if (meeting) router.push(`/meeting/${meeting.id}`);
+            if (meeting) router.push(`/meetings/${meeting.id}`);
         }
     };
 

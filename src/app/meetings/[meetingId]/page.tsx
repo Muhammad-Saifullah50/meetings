@@ -1,11 +1,18 @@
 import { generateToken } from "@/actions/token.actions";
 import { getDbUser, getDbUserById } from "@/actions/user.actions";
 import Meeting from "@/components/Meeting"
+import { currentUser } from "@clerk/nextjs/server";
 import { User } from "@prisma/client";
+import { StreamVideoClient } from "@stream-io/video-react-sdk";
+import { redirect } from "next/navigation";
 
-const MeetingIdPage = async ({ params }: { params: { userId: string } }) => {
+const MeetingIdPage = async () => {
+  const clerkUser = await currentUser();
 
-  const user: User = await getDbUserById(params.userId);
+  if (!clerkUser) redirect('/sign-in')
+
+  const user: User = await getDbUser(clerkUser?.emailAddresses[0].emailAddress);
+  
   const token = await generateToken(user.userId);
   return (
     <Meeting
