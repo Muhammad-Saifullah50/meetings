@@ -14,3 +14,18 @@ export const getDbUser = async (email: string) => {
         throw new Error("Failed to fetch user");
     }
 }
+
+export const getDbUserById = async (id: string) => {
+    try {
+        const user = await db.user.findUnique({
+            where: {
+                id: id,
+            },
+        })
+        return user
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+
