@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const joinMeetingSchema = z.object({
-  url: z.string().min(2).max(50).optional(),
+  url: z.string().min(2).max(200).optional(),
 })
 
 export const sheduleMeetingSchema = z.object({

@@ -13,9 +13,11 @@ import { useState } from "react"
 import Loader from "./Loader"
 import { Textarea } from "./ui/textarea"
 import DatePicker from "react-datepicker";
+import { v4 as uuidv4 } from 'uuid'
 
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image"
+import { DialogTrigger } from "./ui/dialog"
 
 interface MeetingFormProps {
     title: string
@@ -32,7 +34,10 @@ const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
     });
 
     const [isLoading, setIsLoading] = useState(false);
-    const [meetingScheduled, setMeetingScheduled] = useState(false)
+    const [meetingScheduled, setMeetingScheduled] = useState(false);
+    const [meetingId, setMeetingId] = useState('');
+    const [callId, setCallId] = useState('');
+    const [copied, setCopied] = useState(false);
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -42,26 +47,42 @@ const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
             const meeting = await createNewMeeting(email!, userId!, title);
             if (meeting) router.push(`/meetings/${meeting.id}`);
         } else if (type === 'join') {
-
-            //todo: have to push to input url.
+            //@ts-ignore
+            router.push(values.url)
         } else if (type === 'schedule') {
             const meetingData = {
                 ...values,
                 hostId: userId,
-                status: 'scheduled'
+                status: 'scheduled',
+                callId: uuidv4()
             };
             //@ts-ignore
             const meeting = await scheduleMeeting(meetingData);
             if (meeting) setMeetingScheduled(true);
+            setMeetingId(meeting.id);
+            setCallId(meeting.callId)
         } else {
             router.push('/recordings')
         }
         setIsLoading(false)
     };
 
+    const copyLink = () => {
+        const serverUrl = process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVERURL : process.env.NEXT_PUBLIC_LOCALSERVERURL
+        const link = `${serverUrl}/meetings/${meetingId}?callType=default&callId=${callId}`
+
+        navigator.clipboard.writeText(link);
+
+        setCopied(true);
+    }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {!meetingScheduled &&
+                <h2 className="text-white font-bold text-3xl">
+                    {title}
+                </h2>
+            }
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-4">
                 {type === 'join' && (
                     <FormField
                         control={form.control}
@@ -84,7 +105,7 @@ const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
                     />
                 )}
 
-                {type === 'schedule' && !meetingScheduled ? (
+                {type === 'schedule' && !meetingScheduled && (
                     <>
                         <FormField
                             control={form.control}
@@ -161,25 +182,41 @@ const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
                         />
 
 
-                    </>) : (
-                    <div className="flex flex-col gap-10 items-center justify-center">
-                        <div className="flex flex-col items-center justify-center text-2xl font-extrabold text-white">
-                            <Image
-                                src={'/tick.svg'}
-                                width={72}
-                                height={72}
-                                alt="tick"
-                            />
-                            Meeting Created
+                    </>)}
+
+                {
+                    type === 'schedule' && meetingScheduled && (
+                        <div className="flex flex-col gap-10 items-center justify-center">
+                            <div className="flex flex-col items-center justify-center text-2xl font-extrabold text-white">
+                                <Image
+                                    src={'/tick.svg'}
+                                    width={72}
+                                    height={72}
+                                    alt="tick"
+                                />
+                                Meeting Created
+                            </div>
+
+                            <div className="flex flex-col w-full gap-2 text-light">
+                                <Button
+                                    className="flex gap-2 font-bold"
+                                    onClick={copyLink}>
+                                    {!copied && <Image
+                                        src={'/copy.svg'}
+                                        width={20}
+                                        height={20}
+                                        alt="copy"
+                                    />}
+                                    {copied ? 'Invitation Link Copied' : "Copy Invitation Link"}</Button>
+                                <DialogTrigger
+                                    className="font-bold">Close</DialogTrigger>
+                            </div>
                         </div>
 
-                        <div className="flex flex-col w-full gap-2 text-light">
-                            <Button>Copy Invitation</Button>
-                            <Button variant={'outline'}>Close</Button>
-                        </div>
-                    </div>
+                    )
 
-                )}
+                }
+
 
                 <Button
                     disabled={isLoading}

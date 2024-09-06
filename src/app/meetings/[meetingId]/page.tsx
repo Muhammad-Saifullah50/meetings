@@ -3,10 +3,14 @@ import { getDbUser, getDbUserById } from "@/actions/user.actions";
 import Meeting from "@/components/Meeting"
 import { currentUser } from "@clerk/nextjs/server";
 import { User } from "@prisma/client";
-import { StreamVideoClient } from "@stream-io/video-react-sdk";
+import { CallType, StreamVideoClient } from "@stream-io/video-react-sdk";
 import { redirect } from "next/navigation";
 
-const MeetingIdPage = async ({ params }: { params: { meetingId: string } }) => {
+interface MeetingIdPageParams {
+  params: { meetingId: string },
+  searchParams?: { callId: string, callType: string }
+}
+const MeetingIdPage = async ({ params, searchParams }: MeetingIdPageParams) => {
   const clerkUser = await currentUser();
 
   if (!clerkUser) redirect('/sign-in')
@@ -20,6 +24,8 @@ const MeetingIdPage = async ({ params }: { params: { meetingId: string } }) => {
         meetingUser={user}
         token={token!}
         meetingId={params.meetingId}
+        callType={searchParams?.callType!}
+        callId={searchParams?.callId!}
       />
     </section>
 

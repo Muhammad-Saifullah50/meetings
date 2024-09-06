@@ -20,16 +20,15 @@ import { useEffect } from 'react';
 import { toggleMeetingState, updateMeeting } from '@/actions/meeting.actions';
 import { useRouter } from 'next/navigation';
 
-
-const callId = uuidv4();
-
 interface MeetingProps {
     meetingUser: User;
     token: string;
-    meetingId: string
+    meetingId: string;
+    callType: string
+    callId: string
 }
 
-export default function Meeting({ token, meetingUser, meetingId }: MeetingProps) {
+export default function Meeting({ token, meetingUser, meetingId, callType, callId }: MeetingProps) {
     const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
     const user = {
         id: meetingUser.userId,
@@ -37,9 +36,15 @@ export default function Meeting({ token, meetingUser, meetingId }: MeetingProps)
         image: meetingUser.image,
     };
 
+    if (!callId) callId = uuidv4();
+
     const client = new StreamVideoClient({ apiKey, user, token });
-    const call = client.call('default', callId);
-    call.join({ create: true });
+    const call = client.call(callType || 'default', callId);
+// todo: have to correct this
+    // is existing call
+    if (callType) call.join({ create: false });
+
+    call.join({ create: true })
 
     useEffect(() => {
         const updateHandler = async () => {
