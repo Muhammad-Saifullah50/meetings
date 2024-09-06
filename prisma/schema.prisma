@@ -38,7 +38,7 @@ model Meeting {
 
 model Participant {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  Meeting   Meeting? @relation(fields: [meetingId], references: [id])
+  Meeting   Meeting? @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   meetingId String?  @db.ObjectId
   name      String
   image     String

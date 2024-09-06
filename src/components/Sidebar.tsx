@@ -8,7 +8,7 @@ export const Sidebar = () => {
 
     const pathname = usePathname();
     return (
-        <aside className="flex flex-col justify-start bg-dark-secondary w-2/5 p-2">
+        <aside className="flex flex-col justify-start bg-dark-secondary w-2/5 p-2 text-light">
             <div className="flex flex-col justify-center w-full gap-3">
                 {sidebarLinks.map((link) => {
 

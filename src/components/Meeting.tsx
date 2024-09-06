@@ -16,6 +16,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import '@stream-io/video-react-sdk/dist/css/styles.css';
 import Image from 'next/image';
+import { useEffect } from 'react';
+import { toggleMeetingState, updateMeeting } from '@/actions/meeting.actions';
+import { useRouter } from 'next/navigation';
 
 
 const callId = uuidv4();
@@ -23,9 +26,10 @@ const callId = uuidv4();
 interface MeetingProps {
     meetingUser: User;
     token: string;
+    meetingId: string
 }
 
-export default function Meeting({ token, meetingUser }: MeetingProps) {
+export default function Meeting({ token, meetingUser, meetingId }: MeetingProps) {
     const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
     const user = {
         id: meetingUser.userId,
@@ -37,26 +41,40 @@ export default function Meeting({ token, meetingUser }: MeetingProps) {
     const call = client.call('default', callId);
     call.join({ create: true });
 
-    // todo:haver to update the meeting in the databse
-
+    useEffect(() => {
+        const updateHandler = async () => {
+            await updateMeeting(
+                {
+                    meetingId: meetingId,
+                    callId: callId,
+                    status: 'active',
+                }
+            );
+        };
+        updateHandler();
+    }, []);
     return (
         <StreamVideo client={client}>
             <StreamCall call={call}>
-                <MeetingUILayout />
+                <MeetingUILayout meetingId={meetingId} />
             </StreamCall>
         </StreamVideo>
     );
 }
 
-const MeetingUILayout = () => {
-    const {
-        useCallCallingState,
-        useLocalParticipant,
-        useRemoteParticipants,
-    } = useCallStateHooks();
+const MeetingUILayout = ({ meetingId }: { meetingId: string }) => {
+    const { useCallCallingState } = useCallStateHooks();
     const callingState = useCallCallingState();
 
-    if (callingState !== CallingState.JOINED) {
+    const router = useRouter();
+
+    const onCallEnd = async () => {
+        router.push('/');
+
+        await toggleMeetingState(meetingId);
+    }
+
+    if (callingState === CallingState.JOINING) {
         return (
             <section className='flex flex-col gap-2 w-full h-screen items-center justify-center'>
                 <Image
@@ -72,9 +90,8 @@ const MeetingUILayout = () => {
 
     return (
         <StreamTheme className='px-5'>
-                <SpeakerLayout participantsBarPosition={'right'} />
-
-                <CallControls />
+            <SpeakerLayout participantsBarPosition={'right'} />
+            <CallControls onLeave={onCallEnd} />
         </StreamTheme>
     );
 };

@@ -32,6 +32,7 @@ export default async function Home() {
           iconPath='/calendar.svg'
           color='bg-purple'
           type='schedule'
+          userId={user?.id}
         />
         <ActionCard
           title='View Recordings'
