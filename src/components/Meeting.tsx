@@ -1,5 +1,6 @@
 'use client'
 import {
+    Call,
     CallControls,
     CallingState,
     ParticipantView,
@@ -28,7 +29,7 @@ interface MeetingProps {
     callId: string
 }
 
-export default function Meeting({ token, meetingUser, meetingId, callType, callId }: MeetingProps) {
+export default function Meeting({ token, meetingUser, meetingId, callId, callType }: MeetingProps) {
     const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
     const user = {
         id: meetingUser.userId,
@@ -40,11 +41,15 @@ export default function Meeting({ token, meetingUser, meetingId, callType, callI
 
     const client = new StreamVideoClient({ apiKey, user, token });
     const call = client.call(callType || 'default', callId);
-// todo: have to correct this
-    // is existing call
-    if (callType) call.join({ create: false });
 
-    call.join({ create: true })
+
+    if (callType) {
+        call.join({ create: false })
+    }
+    else {
+        call.join({ create: true })
+    }
+
 
     useEffect(() => {
         const updateHandler = async () => {
@@ -61,19 +66,22 @@ export default function Meeting({ token, meetingUser, meetingId, callType, callI
     return (
         <StreamVideo client={client}>
             <StreamCall call={call}>
-                <MeetingUILayout meetingId={meetingId} />
+                <MeetingUILayout meetingId={meetingId} call={call} />
             </StreamCall>
         </StreamVideo>
     );
 }
 
-const MeetingUILayout = ({ meetingId }: { meetingId: string }) => {
-    const { useCallCallingState } = useCallStateHooks();
+const MeetingUILayout = ({ meetingId, call }: { meetingId: string, call: Call }) => {
+    const { useCallCallingState, useParticipants } = useCallStateHooks();
     const callingState = useCallCallingState();
+    const participants = useParticipants();
 
     const router = useRouter();
 
     const onCallEnd = async () => {
+        // todo: have to end call for all if user is host
+        // call.endCall();
         router.push('/');
 
         await toggleMeetingState(meetingId);

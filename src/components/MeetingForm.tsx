@@ -30,7 +30,7 @@ const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
     const router = useRouter();
     const formSchema = getMeetingSchema(type);
     const form = useForm({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(formSchema!),
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -41,12 +41,8 @@ const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-
         setIsLoading(true);
-        if (type === 'new') {
-            const meeting = await createNewMeeting(email!, userId!, title);
-            if (meeting) router.push(`/meetings/${meeting.id}`);
-        } else if (type === 'join') {
+        if (type === 'join') {
             //@ts-ignore
             router.push(values.url)
         } else if (type === 'schedule') {
@@ -67,6 +63,18 @@ const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
         setIsLoading(false)
     };
 
+    const handleNewMeeting = async () => {
+        try {
+            setIsLoading(true);
+            const meeting = await createNewMeeting(email!, userId!, title);
+            if (meeting) router.push(`/meetings/${meeting.id}`);
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsLoading(false)
+        }
+
+    }
     const copyLink = () => {
         const serverUrl = process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_SERVERURL : process.env.NEXT_PUBLIC_LOCALSERVERURL
         const link = `${serverUrl}/meetings/${meetingId}?callType=default&callId=${callId}`
@@ -76,160 +84,176 @@ const MeetingForm = ({ type, title, userId, email }: MeetingFormProps) => {
         setCopied(true);
     }
     return (
-        <Form {...form}>
+        <Form {...form} >
             {!meetingScheduled &&
                 <h2 className="text-white font-bold text-3xl">
                     {title}
                 </h2>
             }
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-4">
-                {type === 'join' && (
-                    <FormField
-                        control={form.control}
-                        name="url"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-light">Meeting Link</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Meeting Link"
-                                        className="bg-dark-tertiary"
-                                        {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Enter your meeting link
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                )}
-
-                {type === 'schedule' && !meetingScheduled && (
-                    <>
+            {type !== 'new' && (
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-8 py-4">
+                    {type === 'join' && (
                         <FormField
                             control={form.control}
-                            name="title"
+                            name="url"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-light"> Meeting Title</FormLabel>
+                                    <FormLabel className="text-light">Meeting Link</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Add a title"
+                                        <Input
+                                            placeholder="Meeting Link"
                                             className="bg-dark-tertiary"
                                             {...field} />
                                     </FormControl>
                                     <FormDescription>
-                                        Enter your meeting title
+                                        Enter your meeting link
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-light"> Meeting Description</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            rows={5}
-                                            placeholder="Add a description"
-                                            className="bg-dark-tertiary"
-                                            {...field} />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Enter your meeting description
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="date"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-light"> Meeting Date and Time</FormLabel>
-                                    <div className="flex  w-full">
-                                        <Image
-                                            src={'/calendar.svg'}
-                                            width={20}
-                                            height={20}
-                                            alt="icon"
-                                            className="mx-2"
-                                        />
-
-                                        <FormControl>
-                                            <DatePicker
-                                                selected={field.value}
-                                                onChange={(date) => field.onChange(date)}
-                                                dateFormat="MMMM d, yyyy h:mm aa"
-                                                showTimeSelect={true}
-                                                timeInputLabel="Time:"
-                                                wrapperClassName="date-picker"
-                                                className="bg-dark-tertiary w-full py-1 px-4 rounded-md text-light"
-
-                                            />
-                                        </FormControl>
-                                    </div>
-
-                                    <FormDescription>
-                                        Select meeting date and time                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-
-                    </>)}
-
-                {
-                    type === 'schedule' && meetingScheduled && (
-                        <div className="flex flex-col gap-10 items-center justify-center">
-                            <div className="flex flex-col items-center justify-center text-2xl font-extrabold text-white">
-                                <Image
-                                    src={'/tick.svg'}
-                                    width={72}
-                                    height={72}
-                                    alt="tick"
-                                />
-                                Meeting Created
-                            </div>
-
-                            <div className="flex flex-col w-full gap-2 text-light">
-                                <Button
-                                    className="flex gap-2 font-bold"
-                                    onClick={copyLink}>
-                                    {!copied && <Image
-                                        src={'/copy.svg'}
-                                        width={20}
-                                        height={20}
-                                        alt="copy"
-                                    />}
-                                    {copied ? 'Invitation Link Copied' : "Copy Invitation Link"}</Button>
-                                <DialogTrigger
-                                    className="font-bold">Close</DialogTrigger>
-                            </div>
-                        </div>
-
-                    )
-
-                }
-
-
-                <Button
-                    disabled={isLoading}
-                    type="submit"
-                    className={`bg-blue w-full hover:bg-blue/90 text-base font-semibold ${meetingScheduled && 'hidden'}`} >
-                    {isLoading ? <Loader size={20} /> : (
-                        type === 'new' ? 'Start an instant meeting' :
-                            type === 'join' ? 'Join meeting' :
-                                type === 'schedule' ? 'Schedule meeting' : 'View recordings'
                     )}
 
+                    {type === 'schedule' && !meetingScheduled && (
+                        <>
+                            <FormField
+                                control={form.control}
+                                name="title"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-light"> Meeting Title</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Add a title"
+                                                className="bg-dark-tertiary"
+                                                {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Enter your meeting title
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-light"> Meeting Description</FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                rows={5}
+                                                placeholder="Add a description"
+                                                className="bg-dark-tertiary"
+                                                {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Enter your meeting description
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="date"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-light"> Meeting Date and Time</FormLabel>
+                                        <div className="flex  w-full">
+                                            <Image
+                                                src={'/calendar.svg'}
+                                                width={20}
+                                                height={20}
+                                                alt="icon"
+                                                className="mx-2"
+                                            />
+
+                                            <FormControl>
+                                                <DatePicker
+                                                    selected={field.value}
+                                                    onChange={(date) => field.onChange(date)}
+                                                    dateFormat="MMMM d, yyyy h:mm aa"
+                                                    showTimeSelect={true}
+                                                    timeInputLabel="Time:"
+                                                    wrapperClassName="date-picker"
+                                                    className="bg-dark-tertiary w-full py-1 px-4 rounded-md text-light"
+
+                                                />
+                                            </FormControl>
+                                        </div>
+
+                                        <FormDescription>
+                                            Select meeting date and time                                    </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+
+                        </>)}
+
+                    {
+                        type === 'schedule' && meetingScheduled && (
+                            <div className="flex flex-col gap-10 items-center justify-center">
+                                <div className="flex flex-col items-center justify-center text-2xl font-extrabold text-white">
+                                    <Image
+                                        src={'/tick.svg'}
+                                        width={72}
+                                        height={72}
+                                        alt="tick"
+                                    />
+                                    Meeting Created
+                                </div>
+
+                                <div className="flex flex-col w-full gap-2 text-light">
+                                    <Button
+                                        className="flex gap-2 font-bold"
+                                        onClick={copyLink}>
+                                        {!copied && <Image
+                                            src={'/copy.svg'}
+                                            width={20}
+                                            height={20}
+                                            alt="copy"
+                                        />}
+                                        {copied ? 'Invitation Link Copied' : "Copy Invitation Link"}</Button>
+                                    <DialogTrigger
+                                        className="font-bold">Close</DialogTrigger>
+                                </div>
+                            </div>
+
+                        )
+
+                    }
+
+
+                    <Button
+                        disabled={isLoading}
+                        type="submit"
+                        className={` w-full text-base font-semibold ${meetingScheduled && 'hidden'}`} >
+                        {isLoading ? <Loader size={20} /> : (
+                            type === 'join' ? 'Join meeting' :
+                                type === 'schedule' ? 'Schedule meeting' : 'View recordings'
+                        )}
+
+                    </Button>
+                </form>
+            )}
+
+            {type === 'new' && !meetingScheduled && (
+
+                <Button
+                    onClick={handleNewMeeting}
+                    disabled={isLoading}
+                    className="w-full text-base font-semibold "
+                >
+                     {isLoading ? <Loader size={20} /> : (
+                            'Start an instant meeting'
+                        )}
                 </Button>
-            </form>
+            )}
         </Form>
     )
 }

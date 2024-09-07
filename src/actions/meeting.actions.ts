@@ -6,10 +6,7 @@ import { getDbUser } from "./user.actions";
 export const createNewMeeting = async (email: string, userId: string, title: string) => {
     try {
         const dbUser: User = await getDbUser(email);
-
         if (!dbUser) throw new Error("User not found");
-
-
         const meeting = await db.meeting.create({
             data: {
                 title: title,

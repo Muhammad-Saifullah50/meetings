@@ -19,6 +19,7 @@ const MeetingModal = ({ title, open, setOpen, type,userId,email }: MeetingModalP
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="bg-dark-secondary border-dark-secondary">
+                <DialogTitle></DialogTitle>
                 <MeetingForm
                     type={type}
                     userId={userId}
