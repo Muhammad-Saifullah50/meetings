@@ -51,39 +51,39 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   console.log(eventType)
+
     
-  if (eventType === 'user.created') {
-      console.log(evt.data, 'event data');
-      const data = {
-          userId: evt.data.id,
-          username: evt.data.username,
-          image: evt.data.image_url,
-          email: evt.data.email_addresses[0].email_address
-      };
+  // if (eventType === 'user.created') {
+  //     console.log(evt.data, 'event data');
+  //     const data = {
+  //         userId: evt.data.id,
+  //         username: evt.data.username,
+  //         image: evt.data.image_url,
+  //         email: evt.data.email_addresses[0].email_address
+  //     };
   
-      await db.user.create({
-          data: data
-      });
-  }
+  //     await db.user.create({
+  //         data: data
+  //     });
+  // }
   
-  if (eventType === 'user.updated') {
-      const data = {
-          userId: evt.data.id,
-          username: evt.data.username,
-          image: evt.data.image_url,
-          email: evt.data.email_addresses[0]?.email_address
-      };
+  // if (eventType === 'user.updated') {
+  //     const data = {
+  //         userId: evt.data.id,
+  //         username: evt.data.username,
+  //         image: evt.data.image_url,
+  //         email: evt.data.email_addresses[0]?.email_address
+  //     };
   
-      await db.user.update({
-          where: {
-              userId: evt.data.id
-          },
-          data: data
-      });
+  //     await db.user.update({
+  //         where: {
+  //             userId: evt.data.id
+  //         },
+  //         data: data
+  //     });
+  console.log(evt.data, 'event data')
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`)
   console.log('Webhook body:', body)
 
   return new Response('', { status: 200 })
-}
-
 }
