@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
 
 @layer utilities {
   .text-balance {
@@ -9,184 +26,67 @@
   }
 }
 
-.cl-card {
-  @apply bg-dark-secondary
-}
-
-.cl-footer {
-  background: linear-gradient(to bottom, #1C1F2E, #1C1F2E) !important;
-}
-
-.cl-formFieldInput {
-  @apply bg-dark-tertiary
-}
-
-.cl-formFieldInput {
-  color: white;
-}
-
-.cl-formButtonPrimary {
-  background-color: #0E78F9 !important;
-}
-
-.cl-socialButtonsBlockButton {
-  @apply !border-2 !border-dark-tertiary w-fit p-4
-}
-
-.cl-socialButtonsProviderIcon__github {
-  @apply invert
-}
-
-.cl-socialButtonsBlockButtonText {
-  @apply max-md:hidden
-}
-
-.cl-socialButtons {
-  @apply flex gap-3 justify-start
-}
-
-
-.cl-socialButtonsBlockButtonText {
-  color: rgb(116, 118, 134);
-}
-
-.cl-headerTitle {
-  color: white;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.cl-headerSubtitle {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.cl-formFieldLabel {
-  color: white;
-}
-
-.cl-footerActionLink {
-  @apply text-blue hover:text-blue
-}
-
-.cl-formFieldInputShowPasswordButton {
-  @apply invert
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
 }
 
 @layer base {
-  /* Remove scrollbar */
-  ::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    border-radius: 0px;
+  * {
+    @apply border-border;
   }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
+  body {
+    @apply bg-background text-foreground;
   }
-
-  ::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 0px;
-  }
-
-  ::webkit-scrollbar-thumb:hover {
-    /* background: #1e2238; */
-    background: transparent;
-  }
-  :root {
-    --radius: 0.5rem;
-  }
-}
-
-.cl-userButtonPopoverActionButton, .cl-userPreview {
-  @apply bg-dark-secondary
-}
-
-body,
-html {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  font-family: sans-serif;
-}
-
-.str-video {
-  background-color: #272a30;
-  color: #ffffff;
-  height: 100dvh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  max-width: 100%;
-}
-
- /* =====  REACT DATE PICKER OVERRIDES */
- .date-picker {
-  @apply overflow-hidden border-transparent w-full placeholder:text-dark-tertiary  h-11 rounded-md px-3 outline-none !important;
-}
-
-
-/* =====  REACT-DATEPICKER OVERRIDES */
-.react-datepicker-wrapper.date-picker {
-display: flex;
-align-items: center;
-}
-
-.react-datepicker,
-.react-datepicker__time,
-.react-datepicker__header,
-.react-datepicker__current-month,
-.react-datepicker__day-name,
-.react-datepicker__day,
-.react-datepicker-time__header {
-background-color: #1C1F2E !important;
-border-color: #363a3d !important;
-color: #abb8c4 !important;
-}
-
-.react-datepicker__current-month,
-.react-datepicker__day-name,
-.react-datepicker-time__header {
-color: #ffffff !important;
-}
-
-.react-datepicker__triangle {
-fill: #1a1d21 !important;
-color: #1a1d21 !important;
-stroke: #1a1d21 !important;
-}
-
-.react-datepicker__time-list-item:hover {
-background-color: #363a3d !important;
-}
-
-.react-datepicker__input-container input {
-background-color: #252A41 !important;
-width: 100%;
-outline: none;
-}
-
-.react-datepicker__day--selected {
-background-color: #0E78F9 !important;
-color: #ffffff !important;
-border-radius: 4px;
-}
-
-.react-datepicker__time-list-item--selected {
-background-color: #0E78F9 !important;
-}
-
-.react-datepicker__time-container {
-border-left: 1px solid #363a3d !important;
-}
-
-.react-datepicker__time-list-item {
-display: flex !important;
-align-items: center !important;
-}
-
-.react-datepicker__calendar-icon {
-  @apply invert mr-4
 }
