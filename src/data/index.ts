@@ -25,3 +25,11 @@ export const sidebarLinks = [
         imgUrl: '/icons/add-personal.svg'
     },
 ]
+
+export const avatars = [
+    '/images/avatar-1.jpeg',
+    '/images/avatar2.jpeg',
+    '/images/avatar3.jpeg',
+    '/images/avatar4.jpeg',
+    '/images/avatar5.jpeg',
+]

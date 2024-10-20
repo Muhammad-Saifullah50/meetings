@@ -51,10 +51,18 @@ const CallList = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
                 // console.log(meeting)
                 return (
                     <MeetingCard
-                        type={type}
-                        title={(meeting as Call).state.custom.description}
+                        key={meeting.id}
+                        icon={
+                            type === 'ended' ? '/icons/previous.svg' :
+                                type === 'upcoming' ? '/icons/upcoming.svg' :
+                                    '/icons/recording.svg'
+                        }
+                        title={(meeting as Call).state.custom.description || 'No Description'}
                         date={(meeting as Call).state.startsAt.toLocaleString() || meeting.start_time.toLocaleString()}
+                        isPreviousMeeting={type === 'ended'}
                         link={type === 'recordings' ? meeting.url : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meeting.id}`}
+                        buttonIcon1={type === 'recordings' ? '/icons/play.svg' : undefined}
+                        buttonText={type === 'recordings' ? 'Play' : 'Start'}
                         handleClick={type === 'recordings'
                             ? () => {
                                 router.push(meeting.url)

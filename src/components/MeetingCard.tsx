@@ -1,64 +1,93 @@
-import Image from "next/image"
-import { Button } from "./ui/button"
+"use client";
 
-const MeetingCard = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
-    return (
-        <div className="bg-dark-1 rounded-[14px] p-6 flex flex-col gap-5 max-w-[533px] max-h-64">
-            <Image
-                src={type === 'recordings'
-                    ? '/icons/recordings.svg'
-                    : '/icons/upcoming.svg'}
-                width={25}
-                height={25}
-                alt="schedule"
-            />
-            <div>
-                <h1 className="font-bold text-2xl"> Team Sync: Sprint Planning & Updates</h1>
-                {type !== 'recordings' && <p>March 15, 2024 - 10:00 AM</p>}
-                {type === 'recordings' &&
-                    (<span>
-                        <p>Start Time: 123</p>
-                        <p>End Time: 123</p>
-                    </span>
-                    )}
-            </div>
-            <div className="flex justify-between w-full pt-2">
-                <div></div>
+import Image from "next/image";
 
-                {type === 'upcoming' && (
-                    <div className="flex items-center justify-center gap-2">
-                        <Button className="bg-blue-1">Start</Button>
-                        <Button variant={'ghost'} className="bg-dark-3">
-                            <Image
-                                src={'/icons/copy.svg'}
-                                width={20}
-                                height={20}
-                                alt="copy"
-                            /> Copy Invitation</Button>
-                    </div>
-                )}
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { avatars } from "@/data";
+import { useToast } from "./../../src/hooks/use-toast";
 
-                {type === 'recordings' && (
-                    <div className="flex items-center justify-center gap-2">
-                        <Button className="bg-blue-1">
-                            <Image
-                                src={'/icons/play.svg'}
-                                width={20}
-                                height={20}
-                                alt="copy"
-                            /> Play </Button>                        <Button variant={'ghost'} className="bg-dark-3">
-                            <Image
-                                src={'/icons/share.svg'}
-                                width={20}
-                                height={20}
-                                alt="copy"
-                            /> Share </Button>
-                    </div>
-                )}
-
-            </div>
-        </div>
-    )
+interface MeetingCardProps {
+    title: string;
+    date: string;
+    icon: string;
+    isPreviousMeeting?: boolean;
+    buttonIcon1?: string;
+    buttonText?: string;
+    handleClick: () => void;
+    link: string;
 }
 
-export default MeetingCard
+const MeetingCard = ({
+    icon,
+    title,
+    date,
+    isPreviousMeeting,
+    buttonIcon1,
+    handleClick,
+    link,
+    buttonText,
+}: MeetingCardProps) => {
+    const { toast } = useToast();
+
+    return (
+        <section className="flex min-h-[258px] w-full flex-col justify-between rounded-[14px] bg-dark-1 px-5 py-8 xl:max-w-[568px]">
+            <article className="flex flex-col gap-5">
+                <Image src={icon} alt="upcoming" width={28} height={28} />
+                <div className="flex justify-between">
+                    <div className="flex flex-col gap-2">
+                        <h1 className="text-2xl font-bold line-clamp-1">{title}</h1>
+                        <p className="text-base font-normal">{date}</p>
+                    </div>
+                </div>
+            </article>
+            <article className={cn("flex justify-center relative", {})}>
+                <div className="relative flex w-full max-sm:hidden">
+                    {avatars.map((img, index) => (
+                        <Image
+                            key={index}
+                            src={img}
+                            alt="attendees"
+                            width={40}
+                            height={40}
+                            className={cn("rounded-full", { absolute: index > 0 })}
+                            style={{ top: 0, left: index * 28 }}
+                        />
+                    ))}
+                    <div className="flex-center absolute left-[136px] size-10 rounded-full border-[5px] border-dark-3 bg-dark-4">
+                        +5
+                    </div>
+                </div>
+                {!isPreviousMeeting && (
+                    <div className="flex gap-2">
+                        <Button onClick={handleClick} className="rounded bg-blue-1 px-6">
+                            {buttonIcon1 && (
+                                <Image src={buttonIcon1} alt="feature" width={20} height={20} />
+                            )}
+                            &nbsp; {buttonText}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                navigator.clipboard.writeText(link);
+                                toast({
+                                    title: "Link Copied",
+                                });
+                            }}
+                            className="bg-dark-4 px-6"
+                        >
+                            <Image
+                                src="/icons/copy.svg"
+                                alt="feature"
+                                width={20}
+                                height={20}
+                            />
+                            &nbsp; Copy Link
+                        </Button>
+                    </div>
+                )}
+            </article>
+        </section>
+    );
+};
+
+export default MeetingCard;
