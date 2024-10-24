@@ -80,6 +80,13 @@
   color: white;
 }
 
+.cl-userButtonPopoverActionButton {
+  @apply hover:text-white
+}
+
+.cl-navbarButton {
+  @apply text-white
+}
 /* =============================== */
 
 @layer utilities {

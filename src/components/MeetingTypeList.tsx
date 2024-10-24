@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Textarea } from "./ui/textarea"
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Input } from "./ui/input"
 
 const MeetingTypeList = () => {
     const { toast } = useToast()
@@ -77,8 +78,9 @@ const MeetingTypeList = () => {
         }
 
     };
+    const baseUrl = process.env.NODE_ENV === 'development' ? process.env.NEXT_PUBLIC_LOCALSERVERURL : process.env.NEXT_PUBLIC_SERVERURL;
 
-    const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetails?.id}`;
+    const meetingLink = `${baseUrl}/meeting/${callDetails?.id}`;
     return (
         <section className='grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4'>
             <HomeCard
@@ -175,11 +177,19 @@ const MeetingTypeList = () => {
             <MeetingModal
                 isOpen={meetingState === 'isJoiningMeeting'}
                 onClose={() => setMeetingState(undefined)}
-                title="Start an Instant Meeting"
+                title="Join a meeting"
                 className='text-center'
-                buttonText="Start Meeting"
-                handleClick={createMeeting}
-            />
+                buttonText="Join Meeting"
+                handleClick={() => router.push(values.link)}
+            >
+                <Input  
+                placeholder={'Meeting Link'}
+                className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+                onChange={(e) => {
+                    setValues({ ...values, link: e.target.value })
+                }}
+                />
+            </MeetingModal>
         </section>
     )
 }

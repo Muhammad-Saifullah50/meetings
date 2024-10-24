@@ -67,6 +67,8 @@ const CallList = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
     if (loading) {
         return <Loader />;
     }
+
+    const baseUrl = process.env.NODE_ENV === 'development' ? process.env.NEXT_PUBLIC_LOCALSERVERURL : process.env.NEXT_PUBLIC_SERVERURL;
     return (
         <div className="grid grid-cols-1 gap-5 xl:grid-cols-2 2xl:grid-cols-3">
             {calls && calls.length > 0 ? calls.map((meeting: CallRecording | Call) => {
@@ -82,7 +84,7 @@ const CallList = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
                         title={(meeting as Call)?.state?.custom?.description || meeting?.filename?.substring(0, 20) || 'Personal Meeting'}
                         date={(meeting as Call)?.state?.startsAt.toLocaleString() || meeting.start_time.toLocaleString()}
                         isPreviousMeeting={type === 'ended'}
-                        link={type === 'recordings' ? meeting.url : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meeting.id}`}
+                        link={type === 'recordings' ? meeting.url : `${baseUrl}/meeting/${meeting.id}`}
                         buttonIcon1={type === 'recordings' ? '/icons/play.svg' : undefined}
                         buttonText={type === 'recordings' ? 'Play' : 'Start'}
                         handleClick={type === 'recordings'

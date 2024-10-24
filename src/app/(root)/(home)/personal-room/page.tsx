@@ -21,8 +21,10 @@ const PersonalRoomPage = () => {
   const client = useStreamVideoClient();
   const router = useRouter();
 
+  const baseUrl = process.env.NODE_ENV === 'development' ? process.env.NEXT_PUBLIC_LOCALSERVERURL : process.env.NEXT_PUBLIC_SERVERURL;
+
   const meetingId = user?.id!
-  const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meetingId}?personal=true`;
+  const meetingLink = `${baseUrl}/meeting/${meetingId}?personal=true`;
 
   const { call } = useGetCallById(meetingId!);
 
@@ -55,7 +57,7 @@ const PersonalRoomPage = () => {
           description={`${user?.username}'s Meeting Room`}
           styles='capitalize' />
         <Table title='Meeting ID' description={meetingId} />
-        <Table title='Invite Link' description={meetingLink} />
+        <Table title='Invite Link' description={meetingLink} styles='bg-blue-1'/>
       </div>
 
       <div className='flex gap-5'>
