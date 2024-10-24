@@ -62,6 +62,7 @@ const CallList = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
     }, [type, callRecordings]);
 
     const calls = getCalls();
+
     const noCallsMessage = getNoCallsMessage();
 
     if (loading) {
@@ -72,7 +73,6 @@ const CallList = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
     return (
         <div className="grid grid-cols-1 gap-5 xl:grid-cols-2 2xl:grid-cols-3">
             {calls && calls.length > 0 ? calls.map((meeting: CallRecording | Call) => {
-                // console.log(meeting)
                 return (
                     <MeetingCard
                         key={meeting.id}

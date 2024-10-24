@@ -57,7 +57,7 @@ const PersonalRoomPage = () => {
           description={`${user?.username}'s Meeting Room`}
           styles='capitalize' />
         <Table title='Meeting ID' description={meetingId} />
-        <Table title='Invite Link' description={meetingLink} styles='bg-blue-1'/>
+        <Table title='Invite Link' description={meetingLink} styles='text-blue-1'/>
       </div>
 
       <div className='flex gap-5'>
