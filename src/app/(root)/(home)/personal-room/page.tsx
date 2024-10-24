@@ -23,10 +23,10 @@ const PersonalRoomPage = () => {
 
   const baseUrl = process.env.NODE_ENV === 'development' ? process.env.NEXT_PUBLIC_LOCALSERVERURL : process.env.NEXT_PUBLIC_SERVERURL;
 
-  const meetingId = user?.id!
+  const meetingId = user?.id || ''
   const meetingLink = `${baseUrl}/meeting/${meetingId}?personal=true`;
 
-  const { call } = useGetCallById(meetingId!);
+  const { call } = useGetCallById(meetingId || '');
 
   const startRoom = async () => {
 

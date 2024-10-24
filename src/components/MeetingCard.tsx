@@ -4,7 +4,6 @@ import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { avatars } from "@/data";
 import { useToast } from "./../../src/hooks/use-toast";
 
 interface MeetingCardProps {
