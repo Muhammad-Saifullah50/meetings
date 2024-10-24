@@ -1,3 +1,4 @@
+import CallList from '@/components/CallList'
 import React from 'react'
 
 const PersonalRoom = () => {
@@ -6,6 +7,8 @@ const PersonalRoom = () => {
     <h1 className='text-3xl font-bold '>
       Meeting Recordings
     </h1>
+
+    <CallList type='recordings'/>
   </section>
   )
 }
