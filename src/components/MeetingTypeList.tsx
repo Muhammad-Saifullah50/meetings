@@ -1,6 +1,5 @@
 'use client'
 
-import Image from "next/image"
 import HomeCard from "./HomeCard"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -137,16 +136,16 @@ const MeetingTypeList = () => {
                             Select Date and Time
                         </label>
                         <ReactDatePicker
-                        selected={values.dateTime}
-                        onChange={(date) => 
-                            setValues({ ...values, dateTime: date! })
-                        }
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        timeIntervals={15}
-                        timeCaption="time"
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        className="w-full rounded bg-dark-3 focus:outline-none p-2"
+                            selected={values.dateTime}
+                            onChange={(date) =>
+                                setValues({ ...values, dateTime: date! })
+                            }
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={15}
+                            timeCaption="time"
+                            dateFormat="MMMM d, yyyy h:mm aa"
+                            className="w-full rounded bg-dark-3 focus:outline-none p-2"
                         />
                     </div>
                 </MeetingModal>
@@ -159,7 +158,7 @@ const MeetingTypeList = () => {
                     buttonText="Copy Meeting Link"
                     handleClick={() => {
                         navigator.clipboard.writeText(meetingLink)
-                        toast({title: 'Meeting Link Copied'})
+                        toast({ title: 'Meeting Link Copied' })
                     }}
                     image="/icons/checked.svg"
                     buttonIcon="/icons/copy.svg"
@@ -167,6 +166,14 @@ const MeetingTypeList = () => {
             )}
             <MeetingModal
                 isOpen={meetingState === 'isInstantMeeting'}
+                onClose={() => setMeetingState(undefined)}
+                title="Start an Instant Meeting"
+                className='text-center'
+                buttonText="Start Meeting"
+                handleClick={createMeeting}
+            />
+            <MeetingModal
+                isOpen={meetingState === 'isJoiningMeeting'}
                 onClose={() => setMeetingState(undefined)}
                 title="Start an Instant Meeting"
                 className='text-center'
