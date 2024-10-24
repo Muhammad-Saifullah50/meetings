@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import MeetingCard from "./MeetingCard";
 import Loader from "./Loader";
-import { toast, useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 const CallList = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
 
@@ -38,7 +38,7 @@ const CallList = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
                 return '';
         }
     };
-    const {toast} = useToast();
+    const { toast } = useToast();
     useEffect(() => {
         try {
             const fetchRecordings = async () => {
@@ -58,7 +58,7 @@ const CallList = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
             toast({ title: 'Try Again Later' })
         }
 
-    }, [type, callRecordings]);
+    }, [type, callRecordings, toast]);
 
     const calls = getCalls();
 
@@ -81,7 +81,7 @@ const CallList = ({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) => {
                                     '/icons/recordings.svg'
                         }
                         title={(meeting as Call)?.state?.custom?.description || (meeting as CallRecording)?.filename?.substring(0, 20) || 'Personal Meeting'}
-                        //@ts-ignore
+                        //@ts-expect-error  
                         date={(meeting as Call)?.state?.startsAt.toLocaleString() || (meeting as CallRecording).start_time.toLocaleString()}
                         isPreviousMeeting={type === 'ended'}
                         link={type === 'recordings' ? (meeting as CallRecording).url : `${baseUrl}/meeting/${(meeting as Call).id}`}
