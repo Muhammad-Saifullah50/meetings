@@ -27,7 +27,7 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
   const router = useRouter();
 
-  if (callingState !== CallingState.JOINED) return <Loader/>
+  if (callingState === CallingState.JOINING) return <Loader/>
 
   const CallLayout = () => {
     switch (layout) {
