@@ -13,6 +13,7 @@ import { LayoutList, UsersIcon } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import EndCallButton from './EndCallButton';
 import Loader from './Loader';
+import OfflineMessage from './OfflineMessage';
 
 
 type CallLayoutType = 'speaker-left' | 'speaker-right' | 'grid';
@@ -27,7 +28,10 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
   const router = useRouter();
 
-  if (callingState === CallingState.JOINING) return <Loader/>
+  if (callingState === CallingState.OFFLINE ) return <OfflineMessage/> 
+
+  if (callingState !== CallingState.JOINED) return <Loader/>
+  
 
   const CallLayout = () => {
     switch (layout) {
