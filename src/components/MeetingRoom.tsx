@@ -23,7 +23,7 @@ const MeetingRoom = () => {
   const isPersonalRoom = !!searchParams.get('personal')
 
   const [showParticipants, setShowParticipants] = useState(false);
-  const { useCallCallingState, useCallEndedAt } = useCallStateHooks();
+  const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
   const router = useRouter();
 
