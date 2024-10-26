@@ -13,7 +13,6 @@ import { LayoutList, UsersIcon } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import EndCallButton from './EndCallButton';
 import Loader from './Loader';
-import OfflineMessage from './OfflineMessage';
 
 
 type CallLayoutType = 'speaker-left' | 'speaker-right' | 'grid';
@@ -24,14 +23,16 @@ const MeetingRoom = () => {
   const isPersonalRoom = !!searchParams.get('personal')
 
   const [showParticipants, setShowParticipants] = useState(false);
-  const {useCallCallingState} = useCallStateHooks();
+  const { useCallCallingState, useCallEndedAt } = useCallStateHooks();
   const callingState = useCallCallingState();
   const router = useRouter();
 
-  if (callingState === CallingState.OFFLINE ) return <OfflineMessage/> 
 
-  if (callingState !== CallingState.JOINED) return <Loader/>
-  
+
+  if (callingState !== CallingState.JOINED) return <Loader />
+
+
+
 
   const CallLayout = () => {
     switch (layout) {
@@ -57,7 +58,7 @@ const MeetingRoom = () => {
       </div>
 
       <div className='flex bottom-0 fixed w-full items-center justify-center gap-5 flex-wrap'>
-        <CallControls onLeave={() => router.push('/')}/>
+        <CallControls onLeave={() => router.push('/')} />
 
         <DropdownMenu>
           <div className='flex items-center'>
